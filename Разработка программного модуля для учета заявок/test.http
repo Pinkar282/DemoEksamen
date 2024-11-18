@@ -13,7 +13,18 @@ Content-Type: application/json
     "problemType"   : "1",
     "description"   : "1",
     "client"        : "1",
-    "status"        : "1"
+    "status"        : "1",
+    "master"        : "1"
+}
+
+###
+PUT http://localhost:5235/1
+Content-Type: application/json
+
+{
+    "description"   : "1",
+    "status"        : "1",
+    "master"        : "1"
 }
 
 ###
