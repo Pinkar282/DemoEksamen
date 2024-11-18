@@ -1,0 +1,19 @@
+GET http://localhost:5235/
+
+###
+POST http://localhost:5235/
+Content-Type: application/json
+
+{
+    "number"        : "1",
+    "day"           : "1",
+    "mouth"         : "1",
+    "year"          : "1",
+    "device"        : "1",
+    "problemType"   : "1",
+    "description"   : "1",
+    "client"        : "1",
+    "status"        : "1"
+}
+
+###
