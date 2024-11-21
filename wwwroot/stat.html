@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика</title>
+</head>
+<body>
+    <a href="create.html">Создание заявки</a>
+    <a href="orders.html">Список заявок</a>
+    <a href="update.html">Обновление заявки</a>
+    <a href="stat.html">Статистика</a><br>
+    Количество выполненных заявок: 
+        <span id="complete_count"></span><br>
+    Среднее время выполнения заявки: 
+        <span id="average_time_to_complete"></span> дней<br>
+    <h3>Статистика по типам неисправностей</h3>
+    <table>
+        <thead>
+            <th>Тип неисправностей</th>
+            <th>Количество</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<style>
+    th, td { border: 1px solid black;}
+</style>
+<script>
+
+    if(!sessionStorage.getItem("token"))
+        window.location.href = "auth.html";
+
+    let complete_count = document.getElementById("complete_count");
+    let average_time_to_complete = document.getElementById("average_time_to_complete");
+    let stat_table = document.querySelector("tbody");
+
+    get_statistics();
+
+    async function get_statistics()
+    {
+        let data = await fetch("http://localhost:7237/statistics");
+        let stat = await data.json();
+
+        complete_count.append(stat.complete_count);
+        average_time_to_complete.append(stat.average_time_to_complete);
+
+        for (var key of Object.keys(stat.problem_type_stat)) {
+            let tr = document.createElement("tr");
+            
+            tr.innerHTML = `
+            <td>${key}</td>
+            <td>${stat.problem_type_stat[key]}</td>`;
+
+            stat_table.append(tr);
+        }
+    }
+</script>
+</html>

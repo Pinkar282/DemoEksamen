@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Список заявок</title>
+</head>
+<body>
+    <a href="create.html">Создание заявки</a>
+    <a href="orders.html">Список заявок</a>
+    <a href="update.html">Обновление заявки</a>
+    <a href="stat.html">Статистика</a>
+    <div>
+        <input id="search" placeholder="Номер"/> 
+        <button onClick="GetFilter()">Найти</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Номер заявки</th>
+                <th>Дата добавления</th>
+                <th>Оборудование</th>
+                <th>Тип неисправности</th>
+                <th>Описание проблемы</th>
+                <th>Клиент</th>
+                <th>Статус</th>
+                <th>Мастер</th>
+                <th>Комментарии</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<script>
+
+    if(!sessionStorage.getItem("token"))
+        window.location.href = "auth.html"; 
+
+    let tbody = document.querySelector("tbody");
+
+    GetOrders();
+
+    async function GetOrders(param = null) {
+        let uri = param ? 
+        `http://localhost:7237/orders?param=${param}` : 
+        "http://localhost:7237/orders";
+
+        let response = await fetch(uri).then(data => data.json())
+        
+        if(response.message)
+            alert(response.message);
+
+        response.repo.forEach(o => {
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${o.number}</td>
+                <td>${o.startDate}</td>
+                <td>${o.device}</td>
+                <td>${o.problemType}</td>
+                <td>${o.description}</td>
+                <td>${o.client}</td>
+                <td>${o.status}</td>
+                <td>${o.master}</td>
+                <td>${o.comments}</td>`;
+
+            tbody.append(tr);
+        });
+        
+    }
+
+    function GetFilter() {
+        tbody.innerHTML = ""
+        let param = document.getElementById("search").value;
+        GetOrders(param)
+    }
+</script>
+<style>
+    th, td { border: 1px solid black;}
+</style>
+</html>
